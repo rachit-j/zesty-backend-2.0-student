@@ -96,7 +96,7 @@ public class AuthenticationController {
 		}
 	}
 
-	@PostMapping("/change-password")
+	@PostMapping("/change-password") // tmp not working
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
 		userService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);

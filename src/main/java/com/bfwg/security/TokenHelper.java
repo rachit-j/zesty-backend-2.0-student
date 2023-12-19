@@ -36,7 +36,7 @@ public class TokenHelper {
 
     static final String AUDIENCE_UNKNOWN = "unknown";
     static final String AUDIENCE_WEB = "web";
-    static final String AUDIENCE_MOBILE = "mobile";
+    static final String AUDIENCE_MOBILE = "mobile"; // different devices for fun
     static final String AUDIENCE_TABLET = "tablet";
 
     @Autowired
@@ -44,7 +44,7 @@ public class TokenHelper {
 
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    public String getUsernameFromToken(String token) {
+    public String getUsernameFromToken(String token) { // get token value
         String username;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
@@ -55,7 +55,7 @@ public class TokenHelper {
         return username;
     }
 
-    public Date getIssuedAtDateFromToken(String token) {
+    public Date getIssuedAtDateFromToken(String token) { // get date from token
         Date issueAt;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
@@ -66,7 +66,7 @@ public class TokenHelper {
         return issueAt;
     }
 
-    public String getAudienceFromToken(String token) {
+    public String getAudienceFromToken(String token) { // get device from token
         String audience;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
@@ -77,7 +77,7 @@ public class TokenHelper {
         return audience;
     }
 
-    public String refreshToken(String token, Device device) {
+    public String refreshToken(String token, Device device) { // reissue token
         String refreshedToken;
         Date a = timeProvider.now();
         try {
@@ -94,7 +94,7 @@ public class TokenHelper {
         return refreshedToken;
     }
 
-    public String generateToken(String username, Device device) {
+    public String generateToken(String username, Device device) { // give token
         String audience = generateAudience(device);
         return Jwts.builder()
                 .setIssuer( APP_NAME )
@@ -106,7 +106,7 @@ public class TokenHelper {
                 .compact();
     }
 
-    private String generateAudience(Device device) {
+    private String generateAudience(Device device) { // set device
         String audience = AUDIENCE_UNKNOWN;
         if (device.isNormal()) {
             audience = AUDIENCE_WEB;
@@ -131,16 +131,16 @@ public class TokenHelper {
         return claims;
     }
 
-    private Date generateExpirationDate(Device device) {
+    private Date generateExpirationDate(Device device) { // expiration date
         long expiresIn = device.isTablet() || device.isMobile() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
         return new Date(timeProvider.now().getTime() + expiresIn * 1000);
     }
 
-    public int getExpiredIn(Device device) {
+    public int getExpiredIn(Device device) { // how much time is left on the token
         return device.isMobile() || device.isTablet() ? MOBILE_EXPIRES_IN : EXPIRES_IN;
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails) { // validate the token
         User user = (User) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getIssuedAtDateFromToken(token);
@@ -153,7 +153,7 @@ public class TokenHelper {
 
     private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
         return (lastPasswordReset != null && created.before(lastPasswordReset));
-    }
+    } // check for pwd reset
 
     public String getToken( HttpServletRequest request ) {
         /**
@@ -163,7 +163,7 @@ public class TokenHelper {
         String authHeader = getAuthHeaderFromHeader( request );
         if ( authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);
-        }
+        } // get token
 
         return null;
     }

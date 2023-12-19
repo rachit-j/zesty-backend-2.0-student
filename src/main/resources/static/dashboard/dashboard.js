@@ -79,7 +79,7 @@ DashboardCtrl.resolve = {
       deferred.resolve(false);
 		}
 		return deferred.promise;
-	}
+	} // This code was made by Rachit Jaiswal!
 };
 
 DashboardCtrl.$inject = ['$scope', '$rootScope', '$http', 'isAuthenticated', 'AuthService'];

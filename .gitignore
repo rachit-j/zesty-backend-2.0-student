@@ -21,5 +21,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-/pom.xml
 .DS_Store

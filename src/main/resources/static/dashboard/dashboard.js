@@ -53,7 +53,12 @@ function DashboardCtrl($scope, $rootScope, $http, isAuthenticated, authService) 
 			setResponse(res, true);
 		})
 		.catch(function(response) {
-			setResponse(response, false);
+			if(response.status === 403) {
+				// Redirect to the 403 error page
+				window.location.href = '/403.html';
+			} else {
+				setResponse(response, false);
+			}
 		});
 	}
 }
